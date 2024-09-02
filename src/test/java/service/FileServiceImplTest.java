@@ -72,10 +72,9 @@ class FileServiceImplTest {
                 "  2. Liverpool       38    24   8   6    67  -  30    80",
                 "  3. Manchester_U    38    24   5   9    87  -  45    77"
         );
-        //mockStatic(Files.class);
         when(Files.readAllLines(mockPath)).thenReturn(mockFileContent);
         List<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
-        assertTrue(teamDataFromFile.get(0).getGoalsFor() == 79);
+        assertEquals(79, teamDataFromFile.get(0).getGoalsFor());
     }
 
     @Test
