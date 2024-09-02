@@ -1,0 +1,2 @@
+The following repository consists of a Java application that uses Maven as a dependency managment. The main purpose of the application is that given an input file that contains data about teams in the Premier League, data such as goals scored and goals received,
+total number of points gathered etc., the Java application takes as an input the file with the data and as an output will return the name of the team that has the smallest difference between goals scored and goals received.
