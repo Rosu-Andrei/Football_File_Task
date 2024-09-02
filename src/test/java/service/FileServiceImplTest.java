@@ -1,6 +1,6 @@
 package service;
 
-import model.TeamStats;
+import model.TeamData;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +49,7 @@ class FileServiceImplTest {
                 "  3. Manchester_U    38    24   5   9    87  -  45    77"
         );
         when(Files.readAllLines(mockPath)).thenReturn(mockFileContent);
-        List<TeamStats> teamDataFromFile = fileService.getTeamDataFromFile();
+        List<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
         assertEquals(3, teamDataFromFile.size());
     }
 
@@ -61,7 +61,7 @@ class FileServiceImplTest {
                 "  3. Manchester_U    38    24   5   9    87  -  45    77"
         );
         when(Files.readAllLines(mockPath)).thenReturn(mockFileContent);
-        List<TeamStats> teamDataFromFile = fileService.getTeamDataFromFile();
+        List<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
         assertEquals("Liverpool", teamDataFromFile.get(1).getTeamName());
     }
 
@@ -74,14 +74,14 @@ class FileServiceImplTest {
         );
         //mockStatic(Files.class);
         when(Files.readAllLines(mockPath)).thenReturn(mockFileContent);
-        List<TeamStats> teamDataFromFile = fileService.getTeamDataFromFile();
+        List<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
         assertTrue(teamDataFromFile.get(0).getGoalsFor() == 79);
     }
 
     @Test
     void getDataFromEmptyFile() throws IOException {
         when(Files.readAllLines(mockPath)).thenReturn(List.of());
-        List<TeamStats> teamDataFromFile = fileService.getTeamDataFromFile();
+        List<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
         assertEquals(0, teamDataFromFile.size());
     }
 
@@ -100,7 +100,7 @@ class FileServiceImplTest {
                 "    ######################################################"
         );
         when(Files.readAllLines(mockPath)).thenReturn(mockFileContent);
-        List<TeamStats> teamDataFromFile = fileService.getTeamDataFromFile();
+        List<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
         assertEquals(7, teamDataFromFile.size());
     }
 

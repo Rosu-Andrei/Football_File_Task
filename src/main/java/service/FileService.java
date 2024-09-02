@@ -1,12 +1,12 @@
 package service;
 
-import model.TeamStats;
+import model.TeamData;
 
 import java.util.List;
 
 public interface FileService {
 
-    List<TeamStats> getTeamDataFromFile();
+    List<TeamData> getTeamDataFromFile();
 
     String getTeamNameWithLeastDifference();
 }
