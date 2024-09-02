@@ -28,7 +28,7 @@ class FileServiceImplTest {
     void setup() {
         mockPath = mock(Path.class);
         mockPattern = Pattern.compile("^\\d+\\.\\s+(.+?)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+-\\s+(\\d+)");
-        fileService = new FileServiceImpl(mockPattern, mockPath);
+        fileService = new FileServiceImpl(mockPath);
     }
 
     @BeforeAll

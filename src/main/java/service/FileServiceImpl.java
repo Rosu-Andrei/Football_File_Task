@@ -14,11 +14,10 @@ import java.util.regex.Pattern;
 
 public class FileServiceImpl implements FileService {
 
-    private final Pattern pattern;
+    private final Pattern pattern = Pattern.compile("^\\d+\\.\\s+(.+?)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+-\\s+(\\d+)");
     private final Path filePath;
 
-    public FileServiceImpl(Pattern pattern, Path filePath) {
-        this.pattern = pattern;
+    public FileServiceImpl(Path filePath) {
         this.filePath = filePath;
     }
 
