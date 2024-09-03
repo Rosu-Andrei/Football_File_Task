@@ -1,6 +1,6 @@
 package service;
 
-import model.TeamData;
+import model.TeamDataV2;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -49,8 +50,8 @@ class FileServiceImplTest {
                 "  3. Manchester_U    38    24   5   9    87  -  45    77"
         );
         when(Files.readAllLines(mockPath)).thenReturn(mockFileContent);
-        List<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
-        assertEquals(3, teamDataFromFile.size());
+        Stream<TeamDataV2> teamDataFromFile = fileService.getTeamDataFromFile();
+        assertEquals(3, teamDataFromFile.count());
     }
 
     @Test
@@ -61,8 +62,8 @@ class FileServiceImplTest {
                 "  3. Manchester_U    38    24   5   9    87  -  45    77"
         );
         when(Files.readAllLines(mockPath)).thenReturn(mockFileContent);
-        List<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
-        assertEquals("Liverpool", teamDataFromFile.get(1).getTeamName());
+        List<TeamDataV2> teamDataFromStream = fileService.getTeamDataFromFile().toList();
+        assertEquals("Liverpool", teamDataFromStream.get(1).teamName());
     }
 
     @Test
@@ -73,15 +74,15 @@ class FileServiceImplTest {
                 "  3. Manchester_U    38    24   5   9    87  -  45    77"
         );
         when(Files.readAllLines(mockPath)).thenReturn(mockFileContent);
-        List<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
-        assertEquals(79, teamDataFromFile.get(0).getGoalsFor());
+        List<TeamDataV2> teamDataFromFile = fileService.getTeamDataFromFile().toList();
+        assertEquals(79, teamDataFromFile.get(0).goalsFor());
     }
 
     @Test
     void getDataFromEmptyFile() throws IOException {
         when(Files.readAllLines(mockPath)).thenReturn(List.of());
-        List<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
-        assertEquals(0, teamDataFromFile.size());
+        Stream<TeamDataV2> teamDataFromFile = fileService.getTeamDataFromFile();
+        assertEquals(0, teamDataFromFile.count());
     }
 
     @Test
@@ -99,8 +100,8 @@ class FileServiceImplTest {
                 "    ######################################################"
         );
         when(Files.readAllLines(mockPath)).thenReturn(mockFileContent);
-        List<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
-        assertEquals(7, teamDataFromFile.size());
+        Stream<TeamDataV2> teamDataFromFile = fileService.getTeamDataFromFile();
+        assertEquals(7, teamDataFromFile.count());
     }
 
     @Test

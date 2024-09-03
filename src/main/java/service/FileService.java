@@ -1,12 +1,16 @@
 package service;
 
-import model.TeamData;
+import model.TeamDataV2;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 public interface FileService {
-
-    List<TeamData> getTeamDataFromFile();
+    /**
+     * Try to modify List with Stream
+     *
+     * @return
+     */
+    Stream<TeamDataV2> getTeamDataFromFile();
 
     String getTeamNameWithLeastDifference();
 }

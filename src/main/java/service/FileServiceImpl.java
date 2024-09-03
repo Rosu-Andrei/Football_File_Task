@@ -1,7 +1,6 @@
 package service;
 
-import model.TeamComparator;
-import model.TeamData;
+import model.TeamDataV2;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class FileServiceImpl implements FileService {
 
@@ -30,8 +30,8 @@ public class FileServiceImpl implements FileService {
      * @return a list of TeamData, each one representing the information of a single team
      */
     @Override
-    public List<TeamData> getTeamDataFromFile() {
-        List<TeamData> teamDataList = new ArrayList<>();
+    public Stream<TeamDataV2> getTeamDataFromFile() {
+        Stream<TeamDataV2> v2Stram = Stream.<TeamDataV2>builder().build();
         try {
             List<String> lines = Files.readAllLines(filePath);
             for (String line : lines) {
@@ -40,13 +40,13 @@ public class FileServiceImpl implements FileService {
                     String teamName = matcher.group(1).trim();
                     int goalsFor = Integer.parseInt(matcher.group(6));
                     int goalsAgainst = Integer.parseInt(matcher.group(7));
-                    teamDataList.add(new TeamData(teamName, goalsFor, goalsAgainst));
+                    v2Stram = Stream.concat(v2Stram, Stream.of(new TeamDataV2(teamName, goalsFor, goalsAgainst)));
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return teamDataList;
+        return v2Stram;
     }
 
     /**
@@ -59,11 +59,10 @@ public class FileServiceImpl implements FileService {
     @Override
     public String getTeamNameWithLeastDifference() {
 
-        List<TeamData> teamDataList = getTeamDataFromFile();
-        Optional<TeamData> result = teamDataList.stream()
-                .min(new TeamComparator());
+        Optional<TeamDataV2> result = getTeamDataFromFile().
+                min(TeamDataV2::compareTo);
         if (result.isPresent())
-            return result.get().getTeamName();
+            return result.get().teamName();
         else
             return "";
     }
