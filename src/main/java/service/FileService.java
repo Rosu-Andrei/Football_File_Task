@@ -1,16 +1,18 @@
 package service;
 
-import model.TeamDataV2;
+import model.TeamData;
+import model.WeatherData;
 
 import java.util.stream.Stream;
 
+
 public interface FileService {
-    /**
-     * Try to modify List with Stream
-     *
-     * @return
-     */
-    Stream<TeamDataV2> getTeamDataFromFile();
+
+    Stream<TeamData> getTeamDataFromFile();
+
+    Stream<WeatherData> getWeatherDataFromFile();
 
     String getTeamNameWithLeastDifference();
+
+    int getDayWithLeastTempDifference();
 }

@@ -1,6 +1,6 @@
 package service;
 
-import model.TeamDataV2;
+import model.TeamData;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +50,7 @@ class FileServiceImplTest {
                 "  3. Manchester_U    38    24   5   9    87  -  45    77"
         );
         when(Files.readAllLines(mockPath)).thenReturn(mockFileContent);
-        Stream<TeamDataV2> teamDataFromFile = fileService.getTeamDataFromFile();
+        Stream<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
         assertEquals(3, teamDataFromFile.count());
     }
 
@@ -62,7 +62,7 @@ class FileServiceImplTest {
                 "  3. Manchester_U    38    24   5   9    87  -  45    77"
         );
         when(Files.readAllLines(mockPath)).thenReturn(mockFileContent);
-        List<TeamDataV2> teamDataFromStream = fileService.getTeamDataFromFile().toList();
+        List<TeamData> teamDataFromStream = fileService.getTeamDataFromFile().toList();
         assertEquals("Liverpool", teamDataFromStream.get(1).teamName());
     }
 
@@ -74,14 +74,14 @@ class FileServiceImplTest {
                 "  3. Manchester_U    38    24   5   9    87  -  45    77"
         );
         when(Files.readAllLines(mockPath)).thenReturn(mockFileContent);
-        List<TeamDataV2> teamDataFromFile = fileService.getTeamDataFromFile().toList();
+        List<TeamData> teamDataFromFile = fileService.getTeamDataFromFile().toList();
         assertEquals(79, teamDataFromFile.get(0).goalsFor());
     }
 
     @Test
     void getDataFromEmptyFile() throws IOException {
         when(Files.readAllLines(mockPath)).thenReturn(List.of());
-        Stream<TeamDataV2> teamDataFromFile = fileService.getTeamDataFromFile();
+        Stream<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
         assertEquals(0, teamDataFromFile.count());
     }
 
@@ -100,7 +100,7 @@ class FileServiceImplTest {
                 "    ######################################################"
         );
         when(Files.readAllLines(mockPath)).thenReturn(mockFileContent);
-        Stream<TeamDataV2> teamDataFromFile = fileService.getTeamDataFromFile();
+        Stream<TeamData> teamDataFromFile = fileService.getTeamDataFromFile();
         assertEquals(7, teamDataFromFile.count());
     }
 

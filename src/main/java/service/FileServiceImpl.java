@@ -1,11 +1,11 @@
 package service;
 
-import model.TeamDataV2;
+import model.TeamData;
+import model.WeatherData;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -14,12 +14,13 @@ import java.util.stream.Stream;
 
 public class FileServiceImpl implements FileService {
 
-    private final Pattern pattern = Pattern.compile("^\\d+\\.\\s+(.+?)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+-\\s+(\\d+)");
+    private final Pattern pattern = Pattern.compile("^\\s*(\\d+)\\s+(\\d+)\\s+(\\d+)|^\\d+\\.\\s+(.+?)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+-\\s+(\\d+)");
     private final Path filePath;
 
     public FileServiceImpl(Path filePath) {
         this.filePath = filePath;
     }
+
 
     /**
      * The following method is used to extract the important data from the input file, in this case the team name,
@@ -29,18 +30,20 @@ public class FileServiceImpl implements FileService {
      *
      * @return a list of TeamData, each one representing the information of a single team
      */
+
+    // Probabil aici o sa mai avem o metoda la fel doar ca aceea se va numi getWeatherDataFromFile.
     @Override
-    public Stream<TeamDataV2> getTeamDataFromFile() {
-        Stream<TeamDataV2> v2Stram = Stream.<TeamDataV2>builder().build();
+    public Stream<TeamData> getTeamDataFromFile() {
+        Stream<TeamData> v2Stram = Stream.<TeamData>builder().build();
         try {
             List<String> lines = Files.readAllLines(filePath);
             for (String line : lines) {
                 Matcher matcher = pattern.matcher(line.trim());
                 if (matcher.find()) {
-                    String teamName = matcher.group(1).trim();
-                    int goalsFor = Integer.parseInt(matcher.group(6));
-                    int goalsAgainst = Integer.parseInt(matcher.group(7));
-                    v2Stram = Stream.concat(v2Stram, Stream.of(new TeamDataV2(teamName, goalsFor, goalsAgainst)));
+                    String teamName = matcher.group(4).trim();
+                    int goalsFor = Integer.parseInt(matcher.group(9));
+                    int goalsAgainst = Integer.parseInt(matcher.group(10));
+                    v2Stram = Stream.concat(v2Stram, Stream.of(new TeamData(teamName, goalsFor, goalsAgainst)));
                 }
             }
         } catch (IOException e) {
@@ -59,11 +62,41 @@ public class FileServiceImpl implements FileService {
     @Override
     public String getTeamNameWithLeastDifference() {
 
-        Optional<TeamDataV2> result = getTeamDataFromFile().
-                min(TeamDataV2::compareTo);
+        Optional<TeamData> result = getTeamDataFromFile().
+                min(TeamData::compareTo);
         if (result.isPresent())
             return result.get().teamName();
         else
             return "";
+    }
+
+    @Override
+    public Stream<WeatherData> getWeatherDataFromFile() {
+        Stream<WeatherData> stream = Stream.<WeatherData>builder().build();
+        try {
+            List<String> lines = Files.readAllLines(filePath);
+            for (String line : lines) {
+                Matcher matcher = pattern.matcher(line.trim());
+                if (matcher.find()) {
+                    int dayNumber = Integer.parseInt(matcher.group(1));
+                    int maxTemp = Integer.parseInt(matcher.group(2));
+                    int minTemp = Integer.parseInt(matcher.group(3));
+                    stream = Stream.concat(stream, Stream.of(new WeatherData(dayNumber, maxTemp, minTemp)));
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return stream;
+    }
+
+    @Override
+    public int getDayWithLeastTempDifference() {
+        Optional<WeatherData> result = getWeatherDataFromFile().
+                min(WeatherData::compareTo);
+        if (result.isPresent())
+            return result.get().dayNumber();
+        else
+            return 0;
     }
 }
