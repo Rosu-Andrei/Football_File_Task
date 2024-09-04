@@ -39,6 +39,7 @@ public class FileServiceImpl implements FileService {
             List<String> lines = Files.readAllLines(filePath);
             for (String line : lines) {
                 Matcher matcher = pattern.matcher(line.trim());
+                System.out.println("Matcher count for football: " + matcher.groupCount());
                 if (matcher.find()) {
                     String teamName = matcher.group(4).trim();
                     int goalsFor = Integer.parseInt(matcher.group(9));
@@ -77,6 +78,7 @@ public class FileServiceImpl implements FileService {
             List<String> lines = Files.readAllLines(filePath);
             for (String line : lines) {
                 Matcher matcher = pattern.matcher(line.trim());
+                System.out.println("Matcher count for weather: " + matcher.groupCount());
                 if (matcher.find()) {
                     int dayNumber = Integer.parseInt(matcher.group(1));
                     int maxTemp = Integer.parseInt(matcher.group(2));
